@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.13.3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/speech-commands@0.2.5"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        #words {
+            display: flex;
+            flex-direction: row;
+            width: 600px;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="words"></div>
+
+<script>
+    window.onload = async () => {
+        const recognizer = speechCommands.create('BROWSER_FFT');
+        await recognizer.ensureModelLoaded();
+
+        displayVocab(recognizer.wordLabels());
+
+        recognizer.listen(result => {
+            const words = recognizer.wordLabels()
+            let bestWord;
+            let bestWordScore;
+            for (let i = 0; i < words.length; ++i) {
+                if (!bestWordScore || result.scores[i] > bestWordScore) {
+                    bestWord = words[i]
+                    bestWordScore = result.scores[i]
+                }
+            }
+            highlightWord(bestWord)
+        }, {
+            probabilityThreshold: 0.75
+        });
+    }
+
+    function displayVocab(wordLabels) {
+        const wordsList = document.getElementById("words")
+        for (let label of wordLabels) {
+            const wordDiv = document.createElement("div")
+            wordDiv.id = label
+            wordDiv.style = "padding: 0.3em; border: 1px solid black; width: 250px"
+            wordDiv.innerText = label
+            wordsList.appendChild(wordDiv)
+        }
+    }
+
+    function highlightWord(word) {
+        const wordElement = document.getElementById(word)
+        wordElement.style.backgroundColor = 'red'
+        setTimeout(() => {
+            wordElement.style.backgroundColor = 'white'
+        }, 1000)
+
+    }
+
+</script>
+
+
+</body>
