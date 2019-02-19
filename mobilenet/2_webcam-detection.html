@@ -1,0 +1,48 @@
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.11.7"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@0.2.2"></script>
+
+<video autoplay playsinline muted id="webcam" width="224" height="224"></video>
+<h1 id="description">thinking...</h1>
+
+<script>
+    let model;
+    let webcamElement;
+
+    window.onload = async () => {
+        webcamElement = document.getElementById('webcam');
+        model = await mobilenet.load();
+
+        await setupWebcam();
+
+        while (true) {
+            const predictions = await model.classify(webcamElement);
+
+            if (predictions[0].probability > 0.5) {
+                document.getElementById('description').innerText = predictions[0].className;
+            } else {
+                document.getElementById('description').innerText = "Not sure"
+            }
+
+            await tf.nextFrame();
+        }
+    };
+
+    async function setupWebcam() {
+        return new Promise((resolve, reject) => {
+            const navigatorAny = navigator;
+            navigator.getUserMedia = navigator.getUserMedia ||
+                navigatorAny.webkitGetUserMedia || navigatorAny.mozGetUserMedia ||
+                navigatorAny.msGetUserMedia;
+            if (navigator.getUserMedia) {
+                navigator.getUserMedia({ video: true },
+                    stream => {
+                        webcamElement.srcObject = stream;
+                        webcamElement.addEventListener('loadeddata', () => resolve(), false);
+                    },
+                    error => reject());
+            } else {
+                reject();
+            }
+        });
+    }
+</script>
