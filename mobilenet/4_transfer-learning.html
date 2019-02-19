@@ -1,0 +1,79 @@
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.11.7"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@0.2.2"></script>
+
+<script src="https://unpkg.com/@tensorflow-models/knn-classifier"></script>
+
+<video autoplay playsinline muted id="webcam" width="640" height="480"></video>
+<h1 id="description"></h1>
+
+<div>
+    <input id="label" type="text">
+    <button id="train">Train</button>
+</div>
+
+
+<script>
+    let model;
+    let webcamElement;
+    let classifier;
+    const classLabels = new Set();
+
+    window.onload = async () => {
+        webcamElement = document.getElementById('webcam');
+        model = await mobilenet.load();
+        classifier = knnClassifier.create();
+
+        await setupWebcam();
+
+        document.getElementById('train').addEventListener('click', () => {
+            const label = document.getElementById('label').value.toUpperCase();
+            if (!label) return;
+
+            classLabels.add(label)
+            const index = [...classLabels].indexOf(label)
+            addTrainingExample(index)
+            console.log('added training example for ' + label)
+        });
+
+        while (true) {
+            if (classifier.getNumClasses() > 0) {
+                const activation = model.infer(webcamElement, 'conv_preds');
+                const prediction = await classifier.predictClass(activation);
+
+                if (prediction.confidences[prediction.classIndex] > 0.5) {
+                    document.getElementById('description').innerText = [...classLabels][prediction.classIndex];
+                } else {
+                    document.getElementById('description').innerText = "Not sure"
+                }
+            } else {
+                document.getElementById('description').innerText = "Nothing trained yet"
+            }
+
+            await tf.nextFrame();
+        }
+    };
+
+    function addTrainingExample(classId) {
+        const activation = model.infer(webcamElement, 'conv_preds');
+        classifier.addExample(activation, classId);
+    }
+
+    async function setupWebcam() {
+        return new Promise((resolve, reject) => {
+            const navigatorAny = navigator;
+            navigator.getUserMedia = navigator.getUserMedia ||
+                navigatorAny.webkitGetUserMedia || navigatorAny.mozGetUserMedia ||
+                navigatorAny.msGetUserMedia;
+            if (navigator.getUserMedia) {
+                navigator.getUserMedia({ video: true },
+                    stream => {
+                        webcamElement.srcObject = stream;
+                        webcamElement.addEventListener('loadeddata', () => resolve(), false);
+                    },
+                    error => reject());
+            } else {
+                reject();
+            }
+        });
+    }
+</script>
