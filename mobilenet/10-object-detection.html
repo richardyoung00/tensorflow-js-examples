@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.13.1"> </script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"> </script>
+
+<style>
+    #img{
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+</style>
+
+<body>
+    <img id="img" crossorigin src="https://raw.githubusercontent.com/tensorflow/tfjs-models/master/coco-ssd/demo/image1.jpg" />
+</body>
+
+<script>
+      const img = document.getElementById('img');
+        img.onload = async () => {
+            cocoSsd.load().then(model => {
+                model.detect(img).then(predictions => {
+                    console.log('Predictions: ', predictions);
+                    drawObjectBoxes(predictions)
+                });
+            });
+        }
+
+        function drawObjectBoxes(predictions) {
+            for (pred of predictions) {
+                const square = document.createElement('div')
+                square.style.border = "1px solid red"
+                square.style.position = "absolute"
+                square.style.left = pred.bbox[0] + 'px'
+                square.style.top = pred.bbox[1] + 'px'
+                square.style.width = pred.bbox[2] + 'px'
+                square.style.height = pred.bbox[3] + 'px'
+                square.innerText = pred.class
+                document.body.appendChild(square)
+            }
+        }
+        
+</script>
+
+</html>

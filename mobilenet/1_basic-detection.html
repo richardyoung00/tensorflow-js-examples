@@ -1,0 +1,18 @@
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.11.7"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@0.2.2"></script>
+
+<img id="img" crossOrigin src="https://upload.wikimedia.org/wikipedia/commons/5/5b/Dog_%28Canis_lupus_familiaris%29_%281%29.jpg"></img>
+<div id="description"></div>
+
+<script>
+    const img = document.getElementById('img');
+    img.onload = async () => {
+        const model = await mobilenet.load()
+        const predictions = await model.classify(img)
+        
+        console.log(predictions)
+
+        const output = document.getElementById('description');
+        output.innerHTML = predictions[0].className
+    }
+</script>
