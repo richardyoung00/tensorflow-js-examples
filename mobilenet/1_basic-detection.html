@@ -1,18 +1,23 @@
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.11.7"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@0.2.2"></script>
 
-<img width="400px" id="img" crossOrigin src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Longhair_Tabby_JaJa.jpg">
-<h1 id="description">thinking...</h1>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.11.7">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@0.2.2">
+</script>
+
+<img width="400px" id="img" crossOrigin
+     src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Longhair_Tabby_JaJa.jpg">
+
+<h1 id="description">loading...</h1>
 
 <script>
     const img = document.getElementById('img');
     img.onload = async () => {
-        const model = await mobilenet.load()
-        const predictions = await model.classify(img)
+        const model = await mobilenet.load();
+        const predictions = await model.classify(img);
         
-        console.log(predictions)
+        console.log(predictions);
 
         const output = document.getElementById('description');
-        output.innerHTML = predictions[0].className
+        output.innerHTML = predictions[0].className;
     }
 </script>

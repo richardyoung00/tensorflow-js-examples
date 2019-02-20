@@ -31,7 +31,7 @@
             const model = await posenet.load(0.75);
             const video = await setupWebcam();
             await detectPosesInRealTime(video, model);
-        }
+        };
 
         async function detectPosesInRealTime(video, model) {
             const canvas = document.getElementById('output');
@@ -41,7 +41,7 @@
                 const poses = await model.estimateMultiplePoses(video, imageScaleFactor, flipHorizontal, outputStride,
                     maxPoseDetections, minPartConfidence, nmsRadius);
 
-                renderVideoFeedToContext(ctx, video)
+                renderVideoFeedToContext(ctx, video);
 
                 for (let pose of poses) {
                     if (pose.score >= minPoseConfidence) {

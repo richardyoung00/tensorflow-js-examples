@@ -1,7 +1,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.11.7"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@0.2.2"></script>
 
-<script src="https://unpkg.com/@tensorflow-models/knn-classifier"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/knn-classifier"></script>
 
 <video autoplay playsinline muted id="webcam" width="640" height="480"></video>
 <h1 id="description"></h1>
@@ -20,18 +20,21 @@
 
     window.onload = async () => {
         webcamElement = document.getElementById('webcam');
+        const trainButton = document.getElementById('train');
         model = await mobilenet.load();
         classifier = knnClassifier.create();
 
         await setupWebcam();
 
-        document.getElementById('train').addEventListener('click', () => {
+        trainButton.addEventListener('click', () => {
             const label = document.getElementById('label').value.toUpperCase();
             if (!label) return;
 
-            classLabels.add(label)
-            const index = [...classLabels].indexOf(label)
-            addTrainingExample(index)
+            classLabels.add(label);
+            const index = [...classLabels].indexOf(label);
+
+            addTrainingExample(index);
+
             console.log('added training example for ' + label)
         });
 

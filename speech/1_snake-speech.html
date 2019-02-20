@@ -13,6 +13,7 @@
         #board {
             width: calc(26 * 24px);
             margin: auto;
+            height: 400px;
         }
 
         #board div {
@@ -41,13 +42,13 @@
 <body onkeydown="enterKey(event)">
 <h1>Voice Controlled Snake</h1>
 <div id="board"></div>
-
 <h1 id="command"></h1>
 <br>
 <div id="reference">Snake implementation from https://hjnilsson.com/</div>
 <script>
     const board = [];
     const boardWidth = 26, boardHeight = 16;
+    const speed = 1500;
 
     var snakeX;
     var snakeY;
@@ -186,7 +187,7 @@
         }
 
         // This function calls itself, with a timeout of 1000 milliseconds
-        setTimeout(gameLoop, 2000 / snakeLength);
+        setTimeout(gameLoop, speed / snakeLength);
     }
 
     function enterKey(event) {
