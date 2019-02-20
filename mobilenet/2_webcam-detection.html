@@ -10,15 +10,16 @@
 
     window.onload = async () => {
         webcamElement = document.getElementById('webcam');
-        model = await mobilenet.load();
 
         await setupWebcam();
+
+        model = await mobilenet.load();
 
         while (true) {
             const predictions = await model.classify(webcamElement);
 
             if (predictions[0].probability > 0.5) {
-                document.getElementById('description').innerText = predictions[0].className;
+                document.getElementById('description').innerText = predictions[0].className
             } else {
                 document.getElementById('description').innerText = "Not sure"
             }

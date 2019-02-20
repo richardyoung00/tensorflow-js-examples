@@ -55,7 +55,7 @@
     var snakeDirection;
 
     window.onload = async () => {
-        const recognizer = speechCommands.create('BROWSER_FFT');
+        const recognizer = speechCommands.create('BROWSER_FFT', 'directional4w');
         await recognizer.ensureModelLoaded();
 
         console.log('inint game')

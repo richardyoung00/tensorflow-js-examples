@@ -20,11 +20,12 @@
     <script>
         const flipHorizontal = true;
         const imageScaleFactor = 0.5;
-        const outputStride = 16;
         const maxPoseDetections = 6;
+        const minPoseConfidence = 0.2;
+
+        const outputStride = 16;
         const minPartConfidence = 0.1;
         const nmsRadius = 30.0;
-        const minPoseConfidence = 0.2;
 
         window.onload = async () => {
             const model = await posenet.load(0.75);
