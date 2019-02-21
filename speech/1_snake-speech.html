@@ -71,14 +71,15 @@
                     bestWordScore = result.scores[i]
                 }
             }
+            console.log(bestWord, bestWordScore)
 
             if (['up', 'down', 'left', 'right'].includes(bestWord)) {
                 setDirection(bestWord)
             }
         }, {
-            probabilityThreshold: 0.75
+            probabilityThreshold: 0.99
         });
-    }
+    };
 
     function initGame() {
         const boardElement = document.getElementById('board');

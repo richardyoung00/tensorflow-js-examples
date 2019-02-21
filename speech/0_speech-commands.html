@@ -38,9 +38,10 @@
                     bestWordScore = result.scores[i]
                 }
             }
+            console.log(bestWord, bestWordScore)
             highlightWord(bestWord)
         }, {
-            probabilityThreshold: 0.75
+            probabilityThreshold: 0.99,
         });
     }
 
