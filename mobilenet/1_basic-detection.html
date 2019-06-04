@@ -1,7 +1,7 @@
 
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.11.7">
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.1.2">
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@0.2.2">
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@1.0.1">
 </script>
 
 <img width="400px" id="img" crossOrigin
@@ -14,7 +14,7 @@
     img.onload = async () => {
         const model = await mobilenet.load();
         const predictions = await model.classify(img);
-        
+
         console.log(predictions);
 
         const output = document.getElementById('description');
