@@ -4,6 +4,19 @@ The models used here are taken from the following repo:
 
 https://github.com/tensorflow/tfjs-models
 
+## How to run these
+These examples should work in any 'modern' browser. There are no npm dependencies as the dependencies are all sourced 
+from CDN's in the html files using script tags. Depending on your setup you may be able to double click the html files to view them in your browser.
+
+If that doesnt work you can serve the files on any static file server. If you have npm installed you can use http-server:
+
+```bash
+npm i http-server -g
+http-server -c-1 .
+```  
+
+When running for the first time it may take a while to load the model. These files can be big and will take a while to download on a slow internet connection.
+
 ## Mobilenet
 Mobilenet is used for general object identification from an image. Mobilenet can distinguish between 1000 different image classes.
 The full list is here http://image-net.org/challenges/LSVRC/2012/browse-synsets
