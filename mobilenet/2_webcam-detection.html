@@ -1,19 +1,16 @@
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.11.7"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@0.2.2"></script>
 
+<script src="../webcam.js"></script>
+
 <video autoplay playsinline muted id="webcam" width="640" height="480"></video>
 <h1 id="description">thinking...</h1>
 
 <script>
-    let model;
-    let webcamElement;
-
     window.onload = async () => {
-        webcamElement = document.getElementById('webcam');
+        const webcamElement = await setupWebcam(document.getElementById('webcam'));
 
-        await setupWebcam();
-
-        model = await mobilenet.load();
+        const model = await mobilenet.load();
 
         while (true) {
             const predictions = await model.classify(webcamElement);
@@ -27,23 +24,4 @@
             await tf.nextFrame();
         }
     };
-
-    async function setupWebcam() {
-        return new Promise((resolve, reject) => {
-            const navigatorAny = navigator;
-            navigator.getUserMedia = navigator.getUserMedia ||
-                navigatorAny.webkitGetUserMedia || navigatorAny.mozGetUserMedia ||
-                navigatorAny.msGetUserMedia;
-            if (navigator.getUserMedia) {
-                navigator.getUserMedia({ video: true },
-                    stream => {
-                        webcamElement.srcObject = stream;
-                        webcamElement.addEventListener('loadeddata', () => resolve(), false);
-                    },
-                    error => reject());
-            } else {
-                reject();
-            }
-        });
-    }
 </script>
