@@ -4,7 +4,7 @@ The models used here are taken from the following repo:
 
 https://github.com/tensorflow/tfjs-models
 
-## How to run these
+## How to run the examples
 These examples should work in any 'modern' browser. There are no npm dependencies as the dependencies are all sourced 
 from CDN's in the html files using script tags. Depending on your setup you may be able to double click the html files to view them in your browser.
 
