@@ -2,8 +2,8 @@
 <html>
 
 <head>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.13.3"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/speech-commands@0.2.5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.1.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/speech-commands@0.3.8"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -41,7 +41,7 @@
             console.log(bestWord, bestWordScore)
             highlightWord(bestWord)
         }, {
-            probabilityThreshold: 0.99,
+            probabilityThreshold: 0.95,
         });
     }
 

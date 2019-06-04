@@ -3,6 +3,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/knn-classifier"></script>
 
+<script src="../webcam.js"></script>
+
 <video autoplay playsinline muted id="webcam" width="640" height="480"></video>
 <h1 id="description"></h1>
 
@@ -19,24 +21,14 @@
     const classLabels = new Set();
 
     window.onload = async () => {
-        webcamElement = document.getElementById('webcam');
         const trainButton = document.getElementById('train');
+        const description = document.getElementById('description');
+        webcamElement = await setupWebcam(document.getElementById('webcam'));
+
         model = await mobilenet.load();
         classifier = knnClassifier.create();
 
-        await setupWebcam();
-
-        trainButton.addEventListener('click', () => {
-            const label = document.getElementById('label').value.toUpperCase();
-            if (!label) return;
-
-            classLabels.add(label);
-            const index = [...classLabels].indexOf(label);
-
-            addTrainingExample(index);
-
-            console.log('added training example for ' + label)
-        });
+        trainButton.addEventListener('click', addTrainingExample);
 
         while (true) {
             if (classifier.getNumClasses() > 0) {
@@ -44,39 +36,28 @@
                 const prediction = await classifier.predictClass(activation);
 
                 if (prediction.confidences[prediction.classIndex] > 0.5) {
-                    document.getElementById('description').innerText = [...classLabels][prediction.classIndex];
+                    description.innerText = [...classLabels][prediction.classIndex];
                 } else {
-                    document.getElementById('description').innerText = "Not sure"
+                    description.innerText = "Not sure"
                 }
             } else {
-                document.getElementById('description').innerText = "Nothing trained yet"
+                description.innerText = "Nothing trained yet"
             }
 
             await tf.nextFrame();
         }
     };
 
-    function addTrainingExample(classId) {
+    function addTrainingExample() {
+        const label = document.getElementById('label').value.toUpperCase();
+        if (!label) return;
+
+        classLabels.add(label);
+        const classId = [...classLabels].indexOf(label);
+
         const activation = model.infer(webcamElement, 'conv_preds');
         classifier.addExample(activation, classId);
-    }
 
-    async function setupWebcam() {
-        return new Promise((resolve, reject) => {
-            const navigatorAny = navigator;
-            navigator.getUserMedia = navigator.getUserMedia ||
-                navigatorAny.webkitGetUserMedia || navigatorAny.mozGetUserMedia ||
-                navigatorAny.msGetUserMedia;
-            if (navigator.getUserMedia) {
-                navigator.getUserMedia({ video: true },
-                    stream => {
-                        webcamElement.srcObject = stream;
-                        webcamElement.addEventListener('loadeddata', () => resolve(), false);
-                    },
-                    error => reject());
-            } else {
-                reject();
-            }
-        });
+        console.log('added training example for ' + label)
     }
 </script>
